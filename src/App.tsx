@@ -10,6 +10,7 @@ import { ContactPage } from './components/ContactPage';
 import { PartnerPage } from './components/PartnerPage';
 
 const App: React.FC = () => {
+  console.log('App component rendering');
   const [currentPage, setCurrentPage] = useState<'home' | 'services' | 'about' | 'contact' | 'partner'>('home');
 
   // Simple "routing" effect

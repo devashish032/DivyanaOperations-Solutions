@@ -38,24 +38,40 @@ async function startServer() {
     res.json(submissions);
   });
 
-  const distPath = path.join(__dirname, "dist");
+  const distPath = path.resolve(__dirname, "dist");
   const isProduction = process.env.NODE_ENV === "production" || fs.existsSync(distPath);
 
   // Vite middleware for development
   if (!isProduction) {
     console.log("Starting in development mode...");
-    const { createServer: createViteServer } = await import("vite");
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
+    try {
+      const { createServer: createViteServer } = await import("vite");
+      const vite = await createViteServer({
+        server: { middlewareMode: true },
+        appType: "spa",
+      });
+      app.use(vite.middlewares);
+    } catch (e) {
+      console.error("Failed to load Vite:", e);
+    }
   } else {
-    console.log("Starting in production mode...");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
+    console.log(`Starting in production mode. Serving from: ${distPath}`);
+    if (fs.existsSync(distPath)) {
+      app.use(express.static(distPath));
+      app.get("*", (req, res) => {
+        const indexPath = path.resolve(distPath, "index.html");
+        if (fs.existsSync(indexPath)) {
+          res.sendFile(indexPath);
+        } else {
+          res.status(404).send("index.html not found in dist folder");
+        }
+      });
+    } else {
+      console.error("DIST folder not found! Make sure to run 'npm run build' first.");
+      app.get("*", (req, res) => {
+        res.status(500).send("Production build not found. Please run build first.");
+      });
+    }
   }
 
   app.listen(PORT, "0.0.0.0", () => {
