@@ -14,7 +14,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onBack, onPartner }) => {
   ];
 
   return (
-    <div className="pt-24 pb-12 animate-in fade-in duration-700 bg-white">
+    <div className="pt-24 pb-12 bg-white">
       {/* About Header */}
       <section className="relative py-24 px-6 overflow-hidden border-b border-slate-100 bg-[#F8FAFC]">
         <div className="max-w-7xl mx-auto relative z-10">

@@ -51,7 +51,7 @@ export const PartnerPage: React.FC<PartnerPageProps> = ({ onBack }) => {
   };
 
   return (
-    <div className="pt-24 pb-12 animate-in fade-in duration-700 bg-white min-h-screen">
+    <div className="pt-24 pb-12 bg-white min-h-screen">
       {/* Header Section */}
       <section className="relative py-24 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto relative z-10">
